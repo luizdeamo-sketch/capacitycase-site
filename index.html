@@ -64,11 +64,15 @@ a:focus-visible, .botao:focus-visible, summary:focus-visible { outline: 2px soli
 .porte-topo { margin-top: 14px; color: var(--sobre-navy); font-weight: 600; border-left: 2px solid var(--ouro-claro); padding-left: 10px; }
 .heroi .lead { margin-top: 12px; }
 .heroi .acao .porte { color: var(--sobre-navy); font-weight: 600; border-left: 2px solid var(--ouro-claro); padding-left: 10px; }
-.provas { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 0; border-top: 1px solid var(--linha); padding-top: 18px; color: var(--tinta); font-weight: 600; font-size: 1rem; }
-.provas span + span::before { content: "·"; color: var(--ouro); margin-inline: 14px; }
-@media (max-width: 700px) {
-  .provas { display: grid; gap: 6px; }
-  .provas span::before, .provas span + span::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--ouro-claro); margin: 0 10px 2px 0; }
+/* faixa de prova: na tela larga fica empilhada à direita do título, acima do botão; no celular vem depois do botão */
+.heroi .acao { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.provas { order: 3; width: 100%; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); border-top: 1px solid var(--linha); padding-top: 18px; margin-top: 8px; }
+.provas div { display: grid; gap: 2px; padding-left: 12px; border-left: 2px solid var(--ouro-claro); }
+.provas b { font: 700 clamp(1.25rem, 1.9vw, 1.9rem)/1.1 var(--f-titulo); color: var(--tinta); letter-spacing: -.01em; }
+.provas span { font-size: .9rem; color: var(--suave); }
+@media (min-width: 900px) {
+  .heroi { align-items: center; }
+  .provas { order: 0; grid-template-columns: minmax(0, 1fr); border-top: 0; padding-top: 0; margin: 0 0 10px; }
 }
 .improviso { display: grid; gap: 10px; }
 .improviso div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; border: 1px solid #2a2f37; border-radius: 10px; color: var(--sobre-navy); font-size: .95rem; }
@@ -234,10 +238,15 @@ details p { margin-top: 10px; color: var(--texto); max-width: 95ch; }
       <p class="lead">Do despacho de tripulantes em Congonhas ao dimensionamento de 4.900 tripulantes, em 8 cadeiras. Depois, carga perigosa e operações médicas. Hoje, com IA, monto a sua torre em semanas, em cima dos sistemas que você já tem.</p>
     </div>
     <div class="acao">
+      <div class="provas" aria-label="Trajetória">
+        <div><b>R$ 340 milhões</b><span>em custos evitados na aviação</span></div>
+        <div><b>R$ 12 milhões</b><span>gerados em 2 anos na logística</span></div>
+        <div><b>Sistemas com IA</b><span>nas operações médicas</span></div>
+        <div><b>19 anos</b><span>de operação</span></div>
+      </div>
       <a class="botao" href="https://wa.me/5511982917535?text=Ol%C3%A1%20Luiz%2C%20quero%20conversar%20sobre%20a%20minha%20empresa" target="_blank" rel="noopener">Conversar sobre a minha empresa</a>
       <small>30 minutos, sem custo. Eu digo se faz sentido para você.</small>
     </div>
-    <p class="provas" aria-label="Trajetória"><span>Aviação · R$ 340 milhões em custos evitados</span><span>Logística · R$ 12 milhões gerados em 2 anos</span><span>Operações médicas · sistemas feitos com IA</span><span>19 anos de operação</span></p>
   </div>
 
   <div class="vitrine" aria-label="Do jeito que é hoje para a torre">
