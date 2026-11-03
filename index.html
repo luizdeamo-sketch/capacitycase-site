@@ -232,6 +232,31 @@ details p { margin-top: 10px; color: var(--texto); max-width: 95ch; }
 .contatos { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: .95rem; }
 .contatos a { color: var(--sobre-navy); }
 .contatos span { user-select: all; }
+
+/* Ajustes de layout de 03/11 (sem mudança de texto) */
+/* 1. Monitor largo: o desenho do "Hoje" cresce para preencher a altura do painel, ao lado do "Com a torre" */
+@media (min-width: 900px) {
+  .painel.hoje { display: flex; flex-direction: column; }
+  .painel.hoje svg { flex: 1 1 auto; min-height: 0; height: 100%; max-height: none; }
+}
+/* 2. Celular: menos rolagem sem tirar conteúdo — fileiras que deslizam para o lado, foto menor, passos em 2 colunas */
+@media (max-width: 700px) {
+  section { padding-block: 40px; }
+  .cab { margin-bottom: 20px; }
+  .rodape-vitrine { padding-block: 14px 32px; }
+  .setores.escuro { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
+  .setores.escuro span { flex: none; }
+  section[aria-labelledby="t-como"] .grade, .depo, .lab .grade {
+    display: grid; grid-auto-flow: column; grid-auto-columns: 84%; grid-template-columns: none;
+    overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding-bottom: 6px; scrollbar-width: thin;
+  }
+  section[aria-labelledby="t-como"] .grade > *, .depo > *, .lab .grade > * { scroll-snap-align: start; }
+  .quem-faz { gap: 18px; }
+  .retrato { max-width: 8.5rem; }
+  .passos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 14px; }
+  .passo::before { font-size: 1.8rem; }
+  .hoje svg { max-height: 13rem; }
+}
 </style>
 
 <header class="topo"><div class="dentro">
