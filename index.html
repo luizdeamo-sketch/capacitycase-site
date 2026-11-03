@@ -1,0 +1,476 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Luiz Amo · Torre de Controle do Negócio | Capacity Case</title>
+<meta name="description" content="15 anos na operação de uma companhia aérea. Agora eu monto a torre de controle da sua empresa, em semanas, com os sistemas que você já tem. 30 minutos de conversa, sem custo.">
+<meta property="og:title" content="Luiz Amo · Torre de Controle do Negócio | Capacity Case">
+<meta property="og:description" content="15 anos na operação de uma companhia aérea. Agora eu monto a torre de controle da sua empresa, em semanas.">
+<meta property="og:image" content="https://capacitycase.com.br/og-image.png">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="assets/icone-dourado.png">
+<!-- Google Analytics: o mesmo do site atual. O clique no WhatsApp vira o evento clique_whatsapp (script no fim da página). -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6TNRLK5JK7"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6TNRLK5JK7');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap">
+<style>
+/* Layout: página larga sem largura máxima, fundo branco como o capacitycase.com.br de hoje; só o fecho em navy.
+   Dentro de cada faixa, grades que viram uma coluna no celular. Identidade Capacity Case: Syne + DM Sans, dourado em poucos pontos.
+   Um visual só (claro), escolhido de propósito: todas as cores ficam explícitas. */
+:root {
+  --papel: #ffffff; --cartao: #ffffff; --suave-fundo: #f6f6f3; --linha: #e4e6e2; --tinta: #111827; --texto: #2a3540; --suave: #5d6871;
+  --ouro: #9c7518; --ouro-tinta: #7a5a10; --ouro-claro: #d7aa42; --ouro-fundo: #f5ecd6;
+  --navy: #0d1117; --sobre-navy: #f1ede4; --sobre-navy-suave: #b9b3a6;
+  --ok: #2f6b3d; --ok-fundo: #e3efe3; --erro: #9a2f22; --erro-fundo: #f6e1de;
+  --f-titulo: "Syne", "Trebuchet MS", sans-serif; --f-texto: "DM Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+html { font-size: clamp(16px, calc(0.55vw + 9px), 21px); }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--papel); color: var(--texto); font: 1rem/1.6 var(--f-texto); }
+.dentro { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 900px) { .dentro { padding-left: max(5vw, env(safe-area-inset-left, 0px)); padding-right: max(5vw, env(safe-area-inset-right, 0px)); } }
+h1, h2, h3 { font-family: var(--f-titulo); color: var(--tinta); margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: var(--ouro-tinta); }
+a:focus-visible, .botao:focus-visible, summary:focus-visible { outline: 2px solid var(--ouro); outline-offset: 3px; }
+.sobrancelha { font: 600 .78rem/1 var(--f-texto); letter-spacing: .16em; text-transform: uppercase; color: var(--ouro); }
+.botao { display: inline-block; font: 600 1rem/1 var(--f-texto); padding: 16px 24px; border-radius: 999px; background: var(--tinta); color: #fff; text-decoration: none; }
+.botao.escuro { background: var(--tinta); color: #fff; }
+.botao.contorno { background: transparent; color: var(--tinta); border: 1.5px solid var(--tinta); padding: 12px 16px; font-size: .95rem; }
+
+/* Versão limpa para o Lovable (03/11/2026). Congelada por 90 dias depois de publicada: só muda antes se vierem menos de 3 conversas pelo site, e aí só o topo. */
+.rascunho { background: var(--ouro-fundo); border-bottom: 1px solid var(--linha); }
+.rascunho .dentro { padding-block: 14px; display: grid; gap: 6px; font-size: .92rem; color: var(--ouro-tinta); }
+.rascunho b { color: var(--tinta); }
+.rascunho ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 2px; }
+
+/* topo */
+.topo { background: var(--papel); color: var(--texto); }
+.barra { padding-block: 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-ic { width: 40px; height: 40px; }
+.logo-wm { height: 18px; width: auto; filter: brightness(0); opacity: .88; }
+.barra-dir { display: flex; align-items: center; gap: 20px; }
+.pill { border: 1px solid var(--linha); border-radius: 999px; padding: 10px 16px; color: var(--tinta); font-weight: 600; font-size: .9rem; text-decoration: none; white-space: nowrap; }
+.pill:hover { border-color: var(--tinta); }
+@media (max-width: 640px) { .esconde-cel, .barra-dir { display: none; } }
+.heroi { padding-block: 40px 40px; display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .heroi { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: end; gap: 48px; } }
+.heroi h1 { color: var(--tinta); font-weight: 700; font-size: clamp(1.9rem, 3.4vw, 3.5rem); line-height: 1.1; letter-spacing: -.01em; }
+.heroi h1 em { font-style: normal; color: #b8891f; }
+.heroi .lead { color: var(--texto); font-size: 1.15rem; margin-top: 18px; }
+.heroi .acao { display: grid; gap: 10px; justify-items: start; }
+.heroi .acao small { color: var(--suave); font-size: .9rem; }
+.porte-topo { margin-top: 14px; color: var(--sobre-navy); font-weight: 600; border-left: 2px solid var(--ouro-claro); padding-left: 10px; }
+.heroi .lead { margin-top: 12px; }
+.heroi .acao .porte { color: var(--sobre-navy); font-weight: 600; border-left: 2px solid var(--ouro-claro); padding-left: 10px; }
+.provas { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 0; border-top: 1px solid var(--linha); padding-top: 18px; color: var(--tinta); font-weight: 600; font-size: 1rem; }
+.provas span + span::before { content: "·"; color: var(--ouro); margin-inline: 14px; }
+@media (max-width: 700px) {
+  .provas { display: grid; gap: 6px; }
+  .provas span::before, .provas span + span::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--ouro-claro); margin: 0 10px 2px 0; }
+}
+.improviso { display: grid; gap: 10px; }
+.improviso div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; border: 1px solid #2a2f37; border-radius: 10px; color: var(--sobre-navy); font-size: .95rem; }
+.improviso div span:last-child { color: var(--sobre-navy-suave); text-align: right; }
+.improviso .vira { border-color: var(--ouro-claro); background: #1a1d22; font-weight: 600; }
+.improviso .vira span:last-child { color: var(--ouro-claro); }
+.seta { text-align: center; color: var(--ouro-claro); font: 700 1.2rem/1 var(--f-titulo); }
+
+/* vitrine: hoje → junta/lê/cria → com a torre (ilustração do que eu faço) */
+.vitrine { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .vitrine { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.15fr); align-items: stretch; } }
+.painel { background: var(--cartao); color: var(--texto); border: 1px solid var(--linha); border-radius: 14px; padding: 20px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.painel.hoje { background: var(--suave-fundo); border-color: transparent; }
+.cab-p { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: .85rem; color: var(--suave); }
+.cab-p b { font: 700 1.1rem var(--f-titulo); color: var(--tinta); }
+.hoje svg { width: 100%; height: auto; max-height: 17rem; display: block; margin-inline: auto; }
+.hoje .rot { font: 500 12px var(--f-texto); fill: #5f656e; text-anchor: middle; }
+.painel .nota { font-size: .95rem; color: var(--texto); }
+.ponte { display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 14px 22px; }
+@media (min-width: 900px) { .ponte { flex-direction: column; flex-wrap: nowrap; } }
+.ponte div { display: grid; justify-items: center; gap: 5px; text-align: center; max-width: 10rem; }
+.ponte b { border: 1.5px solid var(--ouro-claro); color: var(--ouro-tinta); border-radius: 999px; padding: 6px 16px; font: 700 .98rem/1 var(--f-titulo); }
+.ponte span { font-size: .8rem; color: var(--suave); }
+.torre-tela { display: grid; grid-template-columns: clamp(5rem, 7vw, 8rem) minmax(0, 1fr); gap: 18px; align-items: end; }
+.torre { width: 100%; height: auto; display: block; }
+.farol { animation: pisca 2.8s ease-in-out infinite; }
+@keyframes pisca { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .farol { animation: none; } }
+.kpis { display: grid; min-width: 0; }
+.kpis div { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--linha); font-size: .95rem; }
+.st { font: 600 .74rem/1 var(--f-texto); padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
+.st.ok { background: var(--ok-fundo); color: var(--ok); }
+.st.at { background: var(--ouro-fundo); color: var(--ouro-tinta); }
+.st.dv { background: var(--erro-fundo); color: var(--erro); }
+.ia-avisa { border: 1px solid var(--ouro-claro); border-radius: 10px; padding: 10px 12px; font-size: .9rem; display: flex; gap: 10px; align-items: flex-start; background: var(--cartao); }
+.ia-avisa i { font: 700 .68rem/1 var(--f-texto); background: var(--tinta); color: #fff; border-radius: 999px; padding: 6px 5px; flex: none; }
+.decisao { background: var(--ouro-fundo); border-radius: 10px; padding: 10px 12px; font-size: .9rem; color: var(--tinta); }
+.decisao small { display: block; font: 600 .7rem/1.5 var(--f-texto); letter-spacing: .14em; text-transform: uppercase; color: var(--ouro-tinta); }
+.ilustrativo { text-align: right; font-size: .8rem; color: var(--suave); margin-left: auto; }
+.rodape-vitrine { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding-block: 18px 48px; }
+.setores.escuro span { background: var(--cartao); border-color: var(--linha); color: var(--tinta); font-size: .92rem; }
+.setores.escuro .ic { stroke: var(--ouro); }
+.setores .rotulo { background: none !important; border: 0 !important; padding-left: 0 !important; font-weight: 600; color: var(--tinta) !important; }
+.quem-topo { display: flex; align-items: center; gap: 12px; }
+.avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--ouro-claro); }
+.barra-whats { display: none; }
+@media (max-width: 700px) {
+  .barra-whats { display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; text-align: center; text-decoration: none; font-weight: 700; background: var(--ouro-claro); color: var(--tinta);
+    padding: 14px max(16px, env(safe-area-inset-right, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); box-shadow: 0 -4px 16px rgba(13,17,23,.25); }
+  body { padding-bottom: 56px; }
+}
+
+/* ícones de traço */
+.ic { width: 20px; height: 20px; flex: none; stroke: var(--ouro); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.papel .ico { width: 44px; height: 44px; border-radius: 11px; background: var(--ouro-fundo); display: grid; place-items: center; }
+.papel .ico .ic { width: 24px; height: 24px; stroke: var(--ouro-tinta); }
+.mini { background: var(--cartao); border: 1px solid var(--linha); border-radius: 10px; padding: 12px; }
+.mini svg { width: 100%; height: auto; display: block; }
+.mini .rot { font: 500 10px var(--f-texto); fill: #5f656e; }
+
+/* faixas */
+section { padding-block: 64px; border-top: 1px solid var(--linha); }
+.cab { display: grid; gap: 10px; margin-bottom: 32px; }
+.cab h2 { font-weight: 700; font-size: clamp(1.6rem, 3vw, 2.5rem); line-height: 1.12; }
+.cab p { color: var(--suave); font-size: 1.08rem; max-width: 95ch; }
+.grade { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+.cartao { background: var(--cartao); border: 1px solid var(--linha); border-radius: 12px; padding: 24px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.cartao h3 { font-weight: 700; font-size: 1.3rem; line-height: 1.2; }
+
+/* já montei para */
+.setores { display: flex; flex-wrap: wrap; gap: 10px; }
+.setores span { background: var(--cartao); border: 1px solid var(--linha); border-radius: 999px; padding: 8px 16px 8px 12px; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; }
+
+/* como eu trabalho */
+.papel .quem { font: 700 .82rem/1 var(--f-texto); letter-spacing: .12em; text-transform: uppercase; color: var(--ouro); }
+.papel.seu-time { border-top: 3px solid var(--ouro-claro); }
+.verbos { margin-top: 28px; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.verbos div { display: grid; gap: 4px; padding-left: 16px; border-left: 2px solid var(--ouro-claro); }
+.verbos b { font: 700 1.15rem/1.2 var(--f-titulo); color: var(--tinta); }
+.verbos span { color: var(--suave); }
+
+/* quem faz */
+.quem-faz { display: grid; gap: 32px; grid-template-columns: minmax(0, 1fr); align-items: center; }
+@media (min-width: 900px) { .quem-faz { grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 48px; } }
+.retrato { width: 100%; max-width: 15rem; aspect-ratio: 3 / 4; border-radius: 14px; overflow: hidden; background: var(--navy); }
+.retrato img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.quem-faz .texto { display: grid; gap: 16px; min-width: 0; }
+.quem-faz .frase { font: 700 clamp(1.4rem, 2.6vw, 2.1rem)/1.15 var(--f-titulo); color: var(--tinta); text-wrap: balance; }
+.linha-tempo { list-style: none; margin: 0; padding: 0; display: grid; }
+.linha-tempo li { position: relative; display: grid; gap: 2px; padding: 0 0 18px 26px; border-left: 2px solid var(--linha); margin-left: 6px; }
+.linha-tempo li::before { content: ""; position: absolute; left: -8px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--papel); border: 2px solid var(--ouro-claro); }
+.linha-tempo li.agora { border-left-color: transparent; padding-bottom: 0; }
+.linha-tempo li.agora::before { background: var(--ouro); border-color: var(--ouro); }
+.linha-tempo b { font: 700 1.1rem/1.25 var(--f-titulo); color: var(--tinta); }
+.linha-tempo span { color: var(--suave); }
+.trajeto { display: flex; flex-wrap: wrap; gap: 8px 22px; color: var(--suave); font-size: .95rem; }
+.trajeto b { color: var(--tinta); font-weight: 600; }
+blockquote { margin: 0; background: var(--cartao); border-left: 4px solid var(--ouro-claro); border-radius: 0 12px 12px 0; padding: 18px 22px; display: grid; gap: 8px; }
+blockquote p { color: var(--tinta); font-size: 1.05rem; }
+blockquote strong { color: var(--ouro-tinta); }
+blockquote footer { font-size: .88rem; color: var(--suave); }
+blockquote footer b { color: var(--tinta); }
+
+/* como começa */
+.passos { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); counter-reset: passo; }
+.passo { counter-increment: passo; display: grid; gap: 8px; align-content: start; padding-top: 16px; border-top: 2px solid var(--tinta); }
+.passo::before { content: counter(passo); font: 800 2.4rem/1 var(--f-titulo); color: var(--ouro); }
+.passo h3 { font-size: 1.2rem; }
+.passo .prazo { font-size: .85rem; font-weight: 600; color: var(--ouro-tinta); }
+.passo p { color: var(--suave); }
+.passo.final { border-top-color: var(--ouro-claro); }
+
+/* produtos */
+.produtos { background: var(--suave-fundo); }
+.selo { justify-self: start; font: 600 .78rem/1 var(--f-texto); padding: 6px 9px; border-radius: 6px; }
+.selo.no-ar { background: var(--ok-fundo); color: var(--ok); }
+.selo.piloto { background: var(--ouro-fundo); color: var(--ouro-tinta); }
+.produtos .cartao { background: var(--papel); }
+.grade.um { grid-template-columns: minmax(0, 46rem); }
+.produtos .para { font-size: .92rem; color: var(--suave); }
+.produtos .botao { justify-self: start; margin-top: 6px; }
+
+/* laboratório: visual mais leve, tracejado, para não parecer produto à venda */
+.lab .ideia { background: transparent; border: 1.5px dashed var(--linha); }
+.lab .ideia .quem { display: inline-flex; align-items: center; gap: 8px; font: 700 .78rem/1 var(--f-texto); letter-spacing: .12em; text-transform: uppercase; color: var(--suave); }
+.lab .ideia p { font-size: .97rem; }
+.lab .ideia b { color: var(--tinta); }
+
+/* depoimentos */
+.depo { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.depo blockquote p { font-size: 1rem; }
+
+/* perguntas */
+details { border-bottom: 1px solid var(--linha); padding-block: 16px; }
+summary { cursor: pointer; font: 700 1.1rem/1.3 var(--f-titulo); color: var(--tinta); list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; color: var(--ouro); font-size: 1.4rem; line-height: 1; }
+details[open] summary::after { content: "–"; }
+details p { margin-top: 10px; color: var(--texto); max-width: 95ch; }
+
+/* fim */
+.fim { background: var(--navy); color: var(--sobre-navy); border: 0; }
+.fim .dentro { display: grid; gap: 18px; justify-items: start; }
+.fim h2 { color: #fff; font-size: clamp(1.7rem, 3.4vw, 2.8rem); line-height: 1.1; }
+.fim p { color: var(--sobre-navy-suave); }
+.contatos { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: .95rem; }
+.contatos a { color: var(--sobre-navy); }
+.contatos span { user-select: all; }
+</style>
+
+<header class="topo"><div class="dentro">
+  <div class="barra">
+    <span class="logo"><img src="assets/icone-dourado.png" alt="" class="logo-ic"><img src="assets/wordmark-branco.png" alt="Capacity Case" class="logo-wm"></span>
+    <div class="barra-dir">
+      <span class="sobrancelha esconde-cel">Método · Luiz Amo</span>
+      <a class="pill" href="https://wa.me/5511982917535?text=Ol%C3%A1%20Luiz%2C%20quero%20conversar%20sobre%20a%20minha%20empresa" target="_blank" rel="noopener">Falar com o Luiz →</a>
+    </div>
+  </div>
+  <div class="heroi">
+    <div>
+      <p class="sobrancelha quem-topo"><img src="assets/luiz-retrato-escritorio.jpg" alt="" class="avatar">Luiz Amo · Capacity Case</p>
+      <h1 style="margin-top:14px">15 anos na operação de uma companhia aérea. <em>Agora eu monto a torre de controle da sua empresa.</em></h1>
+      <p class="lead">Do despacho de tripulantes em Congonhas ao dimensionamento de 4.900 tripulantes, em 8 cadeiras. Depois, carga perigosa e operações médicas. Hoje, com IA, monto a sua torre em semanas, em cima dos sistemas que você já tem.</p>
+    </div>
+    <div class="acao">
+      <a class="botao" href="https://wa.me/5511982917535?text=Ol%C3%A1%20Luiz%2C%20quero%20conversar%20sobre%20a%20minha%20empresa" target="_blank" rel="noopener">Conversar sobre a minha empresa</a>
+      <small>30 minutos, sem custo. Eu digo se faz sentido para você.</small>
+    </div>
+    <p class="provas" aria-label="Trajetória"><span>Aviação · R$ 340 milhões em custos evitados</span><span>Logística · R$ 12 milhões gerados em 2 anos</span><span>Operações médicas · sistemas feitos com IA</span><span>19 anos de operação</span></p>
+  </div>
+
+  <div class="vitrine" aria-label="Do jeito que é hoje para a torre">
+    <div class="painel hoje">
+      <div class="cab-p"><b>Hoje</b><span>cada número num lugar</span></div>
+      <svg viewBox="0 0 320 230" role="img" aria-label="Planilhas, Access, sistema de mercado, banco e maquininha, e WhatsApp, cada um num lugar">
+        <g stroke="#b3a68c" stroke-width="1.5" stroke-dasharray="3 6" fill="none">
+          <path d="M60 58 L150 118"/><path d="M245 52 L160 112"/><path d="M150 128 L70 176"/><path d="M160 128 L245 160"/><path d="M60 70 Q30 130 58 165"/>
+        </g>
+        <g class="no" transform="translate(38 30) rotate(-6 22 22)"><rect width="44" height="44" rx="10" fill="#fffdf8" stroke="#ddd5c4"/><g stroke="#2b2f36" stroke-width="1.6" fill="none"><rect x="12" y="12" width="20" height="20" rx="2"/><path d="M12 19h20M12 26h20M19 12v20M26 12v20"/></g></g>
+        <text x="58" y="92" class="rot">Planilhas</text>
+        <g class="no" transform="translate(226 22) rotate(5 22 22)"><rect width="44" height="44" rx="10" fill="#fffdf8" stroke="#ddd5c4"/><g stroke="#2b2f36" stroke-width="1.6" fill="none"><ellipse cx="22" cy="14" rx="9" ry="3.5"/><path d="M13 14v14c0 2 4 3.5 9 3.5s9-1.5 9-3.5V14M13 21c0 2 4 3.5 9 3.5s9-1.5 9-3.5"/></g></g>
+        <text x="248" y="84" class="rot">Access</text>
+        <g class="no" transform="translate(133 98) rotate(-3 22 22)"><rect width="44" height="44" rx="10" fill="#fffdf8" stroke="#ddd5c4"/><g stroke="#2b2f36" stroke-width="1.6" fill="none"><rect x="11" y="11" width="22" height="15" rx="2"/><path d="M18 32h8M22 26v6M15 16h8M15 20h12"/></g></g>
+        <text x="155" y="160" class="rot">Sistema de mercado</text>
+        <g class="no" transform="translate(40 150) rotate(4 22 22)"><rect width="44" height="44" rx="10" fill="#fffdf8" stroke="#ddd5c4"/><g stroke="#2b2f36" stroke-width="1.6" fill="none"><rect x="10" y="14" width="24" height="16" rx="2"/><path d="M10 19h24M14 25h6"/></g></g>
+        <text x="62" y="212" class="rot">Banco e maquininha</text>
+        <g class="no" transform="translate(226 138) rotate(-5 22 22)"><rect width="44" height="44" rx="10" fill="#fffdf8" stroke="#ddd5c4"/><g stroke="#2b2f36" stroke-width="1.6" fill="none"><path d="M12 12h20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H20l-5 4v-4h-3a2 2 0 0 1-2-2V14a2 2 0 0 1 2-2z"/></g></g>
+        <text x="248" y="200" class="rot">WhatsApp</text>
+      </svg>
+      <p class="nota">O dono junta tudo na mão, tarde demais para decidir.</p>
+    </div>
+
+    <div class="ponte" aria-label="O que eu faço com os seus sistemas">
+      <div><b>junta →</b><span>o que está espalhado</span></div>
+      <div><b>lê →</b><span>o sistema que já funciona</span></div>
+      <div><b>cria →</b><span>só o que falta</span></div>
+    </div>
+
+    <div class="painel">
+      <div class="cab-p"><b>Com a torre</b><span>tudo num lugar só</span></div>
+      <div class="torre-tela">
+        <svg class="torre" viewBox="0 0 80 200" role="img" aria-label="Desenho de uma torre de controle">
+          <circle class="farol" cx="40" cy="10" r="6" fill="#d7aa42"/>
+          <path d="M40 16v16" stroke="#0d1117" stroke-width="2"/>
+          <path d="M16 32h48l-7 20H23z" fill="#0d1117"/>
+          <rect x="25" y="38" width="30" height="8" rx="1.5" fill="#d7aa42"/>
+          <g stroke="#0d1117" stroke-width="2" fill="none"><path d="M28 52v130M52 52v130"/><path d="M28 66h24M28 82h24M28 98h24M28 114h24M28 130h24M28 146h24M28 162h24"/></g>
+          <path d="M8 184h64" stroke="#0d1117" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <div class="kpis">
+          <div><span>Caixa</span><span class="st ok">No rumo</span></div>
+          <div><span>Vendas</span><span class="st ok">No rumo</span></div>
+          <div><span>Estoque</span><span class="st at">Atenção</span></div>
+          <div><span>A receber</span><span class="st dv">Desvio</span></div>
+          <div><span>Margem</span><span class="st ok">No rumo</span></div>
+          <div><span>Despesas</span><span class="st ok">No rumo</span></div>
+        </div>
+      </div>
+      <div class="ia-avisa"><i>IA</i><span><b>A IA avisa:</b> 4 clientes que compravam todo mês não compram há 45 dias.</span></div>
+      <div class="decisao"><small>Decisão da semana</small>Cobrar os clientes atrasados antes de comprar mais estoque.</div>
+    </div>
+  </div>
+  <div class="rodape-vitrine">
+    <div class="setores escuro" aria-label="Já montei para"><span class="rotulo">Já montei para</span>
+    <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8h13l-1.5 7a2 2 0 0 1-2 1.5H6.5a2 2 0 0 1-2-1.5z"/><path d="M16 9.5l5-3M10 19.5v1.5M7.5 19v1"/></svg>Fundição</span>
+    <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6h11v10H2zM13 9.5h4l3.5 3.5v3H13"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/></svg>Distribuidora</span>
+    <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Corretora de seguros</span>
+    <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="18" r="2"/><circle cx="19" cy="6" r="2"/><path d="M7 18h6a3 3 0 0 0 0-6h-2a3 3 0 0 1 0-6h6"/></svg>Logística</span>
+    <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg>Operações médicas</span>
+    <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15.5l-8-4.5V5.5a1.5 1.5 0 0 0-3 0V11l-8 4.5V17l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-4.5l8 2.5z"/></svg>Aviação</span>
+  </div>
+    <p class="ilustrativo">Indicadores ilustrativos.</p>
+  </div>
+</div></header>
+
+
+
+<section class="dentro" aria-labelledby="t-como">
+  <div class="cab">
+    <p class="sobrancelha">Como eu trabalho</p>
+    <h2 id="t-como">Três papéis. Você não precisa contratar um time de tecnologia.</h2>
+    <p>Hoje a inteligência artificial faz o trabalho técnico pesado. O que faz diferença é saber o que pedir e para quê.</p>
+  </div>
+  <div class="grade">
+    <div class="cartao papel">
+      <span class="ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M7.2 6h9.6M17.8 8L13.2 16M6.2 8l4.6 8"/></svg></span>
+      <span class="quem">Eu</span>
+      <h3>Entendo o negócio e o processo</h3>
+      <p>Mapeio como a operação roda por trás, decido o que vem primeiro e traduzo o negócio em números que fazem sentido.</p>
+    </div>
+    <div class="cartao papel">
+      <span class="ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3l1.8 5.2L18 10l-5.2 1.8L11 17l-1.8-5.2L4 10l5.2-1.8z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg></span>
+      <span class="quem">A IA</span>
+      <h3>Faz o trabalho técnico pesado</h3>
+      <p>Lê documentos sem redigitação, junta os sistemas, monta as telas e avisa quando algo sai do rumo.</p>
+    </div>
+    <div class="cartao papel seu-time">
+      <span class="ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.5c2.8.3 5 2.6 5 5.5"/></svg></span>
+      <span class="quem">Alguém do seu time</span>
+      <h3>Assume a torre no dia a dia</h3>
+      <p>Toda empresa tem aquela pessoa que resolve as planilhas. Eu treino essa pessoa para cuidar da torre. Você não fica refém de ninguém, nem de mim.</p>
+    </div>
+  </div>
+</section>
+
+<section class="dentro" aria-labelledby="t-quem">
+  <div class="quem-faz">
+    <div class="retrato"><img src="assets/luiz-retrato-escritorio.jpg" alt="Luiz Amo"></div>
+    <div class="texto">
+      <p class="sobrancelha" id="t-quem">Quem faz</p>
+      <p class="frase">19 anos respondendo a mesma pergunta: quantas pessoas, em qual escala e a que custo a operação precisa para crescer com margem.</p>
+      <ol class="linha-tempo">
+        <li><b>Aviação · 15 anos, 8 cadeiras</b><span>Do despacho de tripulantes em Congonhas à coordenação do dimensionamento de 4.900 tripulantes e de 4.200 agentes em 61 aeroportos. Criei o Método Capacity, que evitou R$ 340 milhões em custos entre 2016 e 2021. Na pandemia, o mesmo método evitou demissões em massa.</span></li>
+        <li><b>Logística de carga perigosa</b><span>Transporte de combustível. Implantei a torre de controle diária e gerei mais de R$ 12 milhões em 2 anos, entre receita recuperada, recebíveis e redução de custo.</span></li>
+        <li><b>Operações médicas</b><span>Criei uma linha de receita que não existia, instalei regras de margem e construí com IA os sistemas de escala, cadastro e antecipação de plantões, em uso todo dia.</span></li>
+        <li class="agora"><b>Capacity Case · hoje</b><span>O nome vem do Método Capacity. Monto a mesma torre para a empresa média, em semanas. Há 2 anos aplico IA nesse trabalho.</span></li>
+      </ol>
+      <blockquote>
+        <p>“A implementação sólida da Torre de Controle Logístico […] proporcionaram ganhos tangíveis, como a redução significativa do custo operacional (pedágio e combustível, <strong>na casa de 10 a 12% a.a</strong>).”</p>
+        <footer><b>Rafael Teixeira Miranda</b> · Coordenador de Planejamento Estratégico &amp; Supply Chain · <a href="https://www.linkedin.com/in/luizamo/" target="_blank" rel="noopener">recomendação no LinkedIn</a></footer>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<section class="dentro" aria-labelledby="t-comeca">
+  <div class="cab">
+    <p class="sobrancelha">Como começa</p>
+    <h2 id="t-comeca">Da conversa à torre nas mãos do seu time.</h2>
+  </div>
+  <div class="passos">
+    <div class="passo"><h3>Conversa</h3><span class="prazo">30 minutos, sem custo</span><p>Você me conta quais sistemas usa e quais decisões quer tomar com mais segurança.</p></div>
+    <div class="passo"><h3>Raio-X</h3><span class="prazo">cerca de 1 semana</span><p>Defino o que a torre lê, junta e cria, e quais números vão aparecer na tela.</p></div>
+    <div class="passo"><h3>Torre no ar</h3><span class="prazo">em semanas</span><p>O time passa a usar todo dia. Eu acompanho e ensino IA no caminho.</p></div>
+    <div class="passo final"><h3>Seu time assume</h3><span class="prazo">ao longo do acompanhamento</span><p>A pessoa que eu treinei passa a cuidar da torre. Eu sigo por perto para evoluir o que precisar.</p></div>
+  </div>
+</section>
+
+<section class="dentro" aria-labelledby="t-depo">
+  <div class="cab">
+    <p class="sobrancelha">Quem já trabalhou comigo</p>
+    <h2 id="t-depo">O que dizem os donos e os gestores.</h2>
+  </div>
+  <div class="depo">
+    <blockquote><p>“Em poucos dias o sistema estava rodando. Um fenômeno.”</p><footer><b>Dono de fundição de alumínio</b></footer></blockquote>
+    <blockquote><p>“Fenomenal. Fiquei impressionado com a rapidez.”</p><footer><b>Dono de distribuidora de lubrificantes</b></footer></blockquote>
+    <blockquote><p>“Como gerente de torre de controle, o Luiz demonstrou uma excepcional capacidade de coordenação e gestão eficiente das operações.”</p><footer><b>André Dias</b> · Diretor de Operações</footer></blockquote>
+    <blockquote><p>“Trabalhamos juntos na construção dos novos KPI's [da empresa]. […] Expertise na construção e análise de indicadores, sempre focado em reduções, otimizações e ganhos.”</p><footer><b>Fábio Henrique Notaro</b> · Gerente Industrial</footer></blockquote>
+  </div>
+</section>
+
+<section class="produtos dentro" aria-labelledby="t-produtos">
+  <div class="cab">
+    <p class="sobrancelha">Produtos que nasceram do método</p>
+    <h2 id="t-produtos">Quando a mesma dor aparece em várias empresas do mesmo setor, a torre vira produto.</h2>
+    <p>Cada produto tem a própria página, feita para quem é do setor.</p>
+  </div>
+  <div class="grade um">
+    <div class="cartao">
+      <span class="selo no-ar">No ar</span>
+      <h3>CRM Aliança</h3>
+      <div class="mini"><svg viewBox="0 0 260 92" role="img" aria-label="Carteira de clientes em linha do tempo">
+        <path d="M196 4v84" stroke="#d7aa42" stroke-width="1.5" stroke-dasharray="3 4"/><text x="200" y="12" class="rot">hoje</text>
+        <rect x="0" y="22" width="44" height="8" rx="4" fill="#e4ddcf"/><rect x="56" y="21" width="120" height="10" rx="5" fill="#2f6b3d"/><circle cx="176" cy="26" r="5" fill="#2f6b3d"/>
+        <rect x="0" y="46" width="38" height="8" rx="4" fill="#e4ddcf"/><rect x="56" y="45" width="78" height="10" rx="5" fill="#d7aa42"/><circle cx="134" cy="50" r="5" fill="#d7aa42"/>
+        <rect x="0" y="70" width="48" height="8" rx="4" fill="#e4ddcf"/><rect x="56" y="69" width="170" height="10" rx="5" fill="#0d1117"/><circle cx="226" cy="74" r="5" fill="#0d1117"/>
+      </svg></div>
+      <p>O CRM da corretora de seguros: a carteira em linha do tempo e a reunião que se confirma sozinha pelo WhatsApp.</p>
+      <p class="para">Para corretoras de seguro de vida e patrimônio.</p>
+      <a class="botao contorno" href="https://crmalianca.com.br" target="_blank" rel="noopener">Conhecer o CRM Aliança</a>
+    </div>
+  </div>
+</section>
+
+<section class="dentro lab" aria-labelledby="t-lab">
+  <div class="cab">
+    <p class="sobrancelha">Laboratório · ideias em teste</p>
+    <h2 id="t-lab">O que estou testando agora.</h2>
+    <p>Quando olho um setor por dentro, às vezes enxergo um problema que nenhuma empresa sozinha resolve. Estas ideias nasceram assim. Ainda estão em teste e podem mudar, mas mostram como eu penso.</p>
+  </div>
+  <div class="grade">
+    <div class="cartao ideia">
+      <span class="quem"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/></svg>Reciclagem</span>
+      <h3>Sucata Livre</h3>
+      <p><b>O que vi:</b> quem gera sucata não sabe quem compra perto, e quem compra não acha material com regularidade.</p>
+      <p><b>A ideia:</b> um classificado onde quem tem material anuncia de graça e os compradores da região mandam oferta.</p>
+    </div>
+    <div class="cartao ideia">
+      <span class="quem"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg>Saúde</span>
+      <h3>Plantão Livre</h3>
+      <p><b>O que vi:</b> o médico aceita ou recusa plantão sem saber quanto sobra depois de pagar o deslocamento.</p>
+      <p><b>A ideia:</b> quem precisa de médico publica o plantão, e o médico vê o valor líquido antes de aceitar.</p>
+    </div>
+    <div class="cartao ideia">
+      <span class="quem"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19V7M3 15h18v4M21 15v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11.5" r="2"/></svg>Aviação e hotelaria</span>
+      <h3>Stayline</h3>
+      <p><b>O que vi:</b> o pernoite de tripulação ainda é montado em planilha e e-mail, e o hotel demora para receber.</p>
+      <p><b>A ideia:</b> a escala da companhia vira reserva no hotel automaticamente, com o hotel recebendo antes.</p>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="dentro" aria-labelledby="t-perguntas">
+  <div class="cab">
+    <p class="sobrancelha">Perguntas frequentes</p>
+    <h2 id="t-perguntas">O que os donos costumam perguntar.</h2>
+  </div>
+  <details><summary>Vou ter que trocar os sistemas que já uso?</summary><p>Não. A torre lê o que já funciona e junta o que está espalhado. Eu só crio o que falta.</p></details>
+  <details><summary>Quem fica com os dados e com o sistema?</summary><p>A sua empresa. Os dados e o sistema ficam nas contas da empresa. Você não fica refém de ninguém.</p></details>
+  <details><summary>E se um dia você sair?</summary><p>A torre continua. Desde o começo eu treino alguém do seu time para cuidar dela no dia a dia.</p></details>
+  <details><summary>Preciso entender de IA ou de tecnologia?</summary><p>Não. Você precisa saber quais decisões quer tomar. A parte técnica é comigo e com a IA.</p></details>
+  <details><summary>A torre serve para a minha empresa?</summary><p>A torre faz mais sentido a partir de R$ 500 mil de faturamento por mês, quando o dono já não acompanha tudo de cabeça e a informação está espalhada em vários sistemas e planilhas. Se a sua empresa está chegando lá, vale conversar também.</p></details>
+  <details><summary>Quanto custa?</summary><p>Cada empresa tem um valor, porque depende do tamanho da operação e do que a torre precisa ler, juntar e criar. Na conversa de 30 minutos eu entendo o seu caso e já digo uma faixa para ele.</p></details>
+</section>
+
+<section class="fim" aria-labelledby="t-fim"><div class="dentro" style="padding-block:64px">
+  <h2 id="t-fim">Quantos sistemas você abre para saber como está a sua empresa?</h2>
+  <p>Me conta. Em 30 minutos eu digo se uma torre faz sentido para você.</p>
+  <a class="botao" href="https://wa.me/5511982917535?text=Ol%C3%A1%20Luiz%2C%20quero%20conversar%20sobre%20a%20minha%20empresa" target="_blank" rel="noopener">Conversar pelo WhatsApp</a>
+  <div class="contatos">
+    <a href="https://www.linkedin.com/in/luizamo/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:luiz.amo@capacitycase.com.br">luiz.amo@capacitycase.com.br</a>
+    <a href="https://crmalianca.com.br" target="_blank" rel="noopener">CRM Aliança</a>
+  </div>
+</div></section>
+
+<a class="barra-whats" href="https://wa.me/5511982917535?text=Ol%C3%A1%20Luiz%2C%20quero%20conversar%20sobre%20a%20minha%20empresa" target="_blank" rel="noopener">Conversar com o Luiz pelo WhatsApp</a>
+
+<script>
+/* Medição dos 90 dias: cada botão de WhatsApp conta um clique_whatsapp no Analytics, com o lugar do botão e a origem.
+   Links das redes: capacitycase.com.br/?utm_source=linkedin (ou instagram, whatsapp). A origem também vai na mensagem: "(vim pelo linkedin)". */
+(function () {
+  var origem = '';
+  try { origem = new URLSearchParams(location.search).get('utm_source') || ''; } catch (e) {}
+  var lugares = ['topo', 'heroi', 'fim', 'barra_celular'];
+  document.querySelectorAll('a[href^="https://wa.me/"]').forEach(function (a, i) {
+    if (origem) a.href = a.href + encodeURIComponent(' (vim pelo ' + origem + ')');
+    a.addEventListener('click', function () {
+      try { gtag('event', 'clique_whatsapp', { lugar: lugares[i] || ('botao_' + (i + 1)), origem: origem || 'direto' }); } catch (e) {}
+    });
+  });
+})();
+</script>
