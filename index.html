@@ -191,7 +191,18 @@ blockquote footer b { color: var(--tinta); }
 .selo.no-ar { background: var(--ok-fundo); color: var(--ok); }
 .selo.piloto { background: var(--ouro-fundo); color: var(--ouro-tinta); }
 .produtos .cartao { background: var(--papel); }
-.grade.um { grid-template-columns: minmax(0, 30rem); }
+.grade.um { grid-template-columns: minmax(0, 1fr); }
+/* cartão de produto deitado na tela larga: texto à esquerda, ilustração à direita */
+.prod-largo { gap: 20px; }
+.prod-texto { display: grid; gap: 10px; align-content: start; justify-items: start; min-width: 0; }
+.prod-largo .mini svg { max-width: none; }
+@media (min-width: 900px) { .prod-largo { grid-template-columns: minmax(0, 1fr) minmax(0, 28rem); align-items: center; gap: 40px; padding: 28px 32px; } }
+/* perguntas em duas colunas na tela larga */
+@media (min-width: 1100px) { .faq { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 56px; align-items: start; } }
+/* fecho: texto à esquerda, botão e contatos à direita */
+.fim .botao { background: var(--ouro-claro); color: var(--tinta); }
+.fim-texto, .fim-acao { display: grid; gap: 16px; justify-items: start; min-width: 0; }
+@media (min-width: 900px) { .fim .dentro { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: center; column-gap: 56px; } }
 .produtos .para { font-size: .92rem; color: var(--suave); }
 .produtos .botao { justify-self: start; margin-top: 6px; }
 
@@ -396,18 +407,20 @@ details p { margin-top: 10px; color: var(--texto); max-width: 95ch; }
     <p>Cada produto tem a própria página, feita para quem é do setor.</p>
   </div>
   <div class="grade um">
-    <div class="cartao">
+    <div class="cartao prod-largo">
+      <div class="prod-texto">
       <span class="selo no-ar">No ar</span>
       <h3>CRM Aliança</h3>
+      <p>O CRM da corretora de seguros: a carteira em linha do tempo e a reunião que se confirma sozinha pelo WhatsApp.</p>
+      <p class="para">Para corretoras de seguro de vida e patrimônio.</p>
+      <a class="botao contorno" href="https://crmalianca.com.br" target="_blank" rel="noopener">Conhecer o CRM Aliança</a>
+      </div>
       <div class="mini"><svg viewBox="0 0 260 92" role="img" aria-label="Carteira de clientes em linha do tempo">
         <path d="M196 4v84" stroke="#d7aa42" stroke-width="1.5" stroke-dasharray="3 4"/><text x="200" y="12" class="rot">hoje</text>
         <rect x="0" y="22" width="44" height="8" rx="4" fill="#e4ddcf"/><rect x="56" y="21" width="120" height="10" rx="5" fill="#2f6b3d"/><circle cx="176" cy="26" r="5" fill="#2f6b3d"/>
         <rect x="0" y="46" width="38" height="8" rx="4" fill="#e4ddcf"/><rect x="56" y="45" width="78" height="10" rx="5" fill="#d7aa42"/><circle cx="134" cy="50" r="5" fill="#d7aa42"/>
         <rect x="0" y="70" width="48" height="8" rx="4" fill="#e4ddcf"/><rect x="56" y="69" width="170" height="10" rx="5" fill="#0d1117"/><circle cx="226" cy="74" r="5" fill="#0d1117"/>
       </svg></div>
-      <p>O CRM da corretora de seguros: a carteira em linha do tempo e a reunião que se confirma sozinha pelo WhatsApp.</p>
-      <p class="para">Para corretoras de seguro de vida e patrimônio.</p>
-      <a class="botao contorno" href="https://crmalianca.com.br" target="_blank" rel="noopener">Conhecer o CRM Aliança</a>
     </div>
   </div>
 </section>
@@ -447,22 +460,28 @@ details p { margin-top: 10px; color: var(--texto); max-width: 95ch; }
     <p class="sobrancelha">Perguntas frequentes</p>
     <h2 id="t-perguntas">O que os donos costumam perguntar.</h2>
   </div>
+  <div class="faq">
   <details><summary>Vou ter que trocar os sistemas que já uso?</summary><p>Não. A torre lê o que já funciona e junta o que está espalhado. Eu só crio o que falta.</p></details>
   <details><summary>Quem fica com os dados e com o sistema?</summary><p>A sua empresa. Os dados e o sistema ficam nas contas da empresa. Você não fica refém de ninguém.</p></details>
   <details><summary>E se um dia você sair?</summary><p>A torre continua. Desde o começo eu treino alguém do seu time para cuidar dela no dia a dia.</p></details>
   <details><summary>Preciso entender de IA ou de tecnologia?</summary><p>Não. Você precisa saber quais decisões quer tomar. A parte técnica é comigo e com a IA.</p></details>
   <details><summary>A torre serve para a minha empresa?</summary><p>A torre faz mais sentido a partir de R$ 500 mil de faturamento por mês, quando o dono já não acompanha tudo de cabeça e a informação está espalhada em vários sistemas e planilhas. Se a sua empresa está chegando lá, vale conversar também.</p></details>
   <details><summary>Quanto custa?</summary><p>Cada empresa tem um valor, porque depende do tamanho da operação e do que a torre precisa ler, juntar e criar. Na conversa de 30 minutos eu entendo o seu caso e já digo uma faixa para ele.</p></details>
+  </div>
 </section>
 
 <section class="fim" aria-labelledby="t-fim"><div class="dentro" style="padding-block:64px">
+  <div class="fim-texto">
   <h2 id="t-fim">Quantos sistemas você abre para saber como está a sua empresa?</h2>
   <p>Me conta. Em 30 minutos eu digo se uma torre faz sentido para você.</p>
+  </div>
+  <div class="fim-acao">
   <a class="botao" href="https://wa.me/5511982917535?text=Ol%C3%A1%20Luiz%2C%20quero%20conversar%20sobre%20a%20minha%20empresa" target="_blank" rel="noopener">Conversar pelo WhatsApp</a>
   <div class="contatos">
     <a href="https://www.linkedin.com/in/luizamo/" target="_blank" rel="noopener">LinkedIn</a>
     <a href="mailto:luiz.amo@capacitycase.com.br">luiz.amo@capacitycase.com.br</a>
     <a href="https://crmalianca.com.br" target="_blank" rel="noopener">CRM Aliança</a>
+  </div>
   </div>
 </div></section>
 
